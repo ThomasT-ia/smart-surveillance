@@ -1,0 +1,113 @@
+# ============================================================================
+# .gitignore - SISTEMA DI VIDEOSORVEGLIANZA
+# ============================================================================
+# Questo file indica a Git quali file NON deve tracciare/committare
+
+# ----------------------------------------------------------------------------
+# FILE SENSIBILI - MAI COMMITTARE!
+# ----------------------------------------------------------------------------
+.env                          # File con credenziali reali
+*.key                         # File di chiavi
+secrets/                      # Directory con segreti
+
+# ----------------------------------------------------------------------------
+# REGISTRAZIONI E MEDIA
+# ----------------------------------------------------------------------------
+static/recordings/            # Video e foto registrate
+*.webm                        # File video
+*.mp4                         # File video alternativi
+*.avi                         # File video alternativi
+alert_*.jpg                   # Screenshot di alert
+video_*.webm                  # Video registrati
+
+# ----------------------------------------------------------------------------
+# MODELLI AI E FILE GRANDI
+# ----------------------------------------------------------------------------
+*.pt                          # Modelli YOLO (troppo grandi per Git)
+*.pth                         # Altri modelli PyTorch
+*.onnx                        # Modelli ONNX
+*.weights                     # Pesi delle reti neurali
+models/                       # Directory con modelli (usa Git LFS se necessario)
+
+# ----------------------------------------------------------------------------
+# FILE TEMPORANEI E CACHE
+# ----------------------------------------------------------------------------
+__pycache__/                  # Cache Python
+*.py[cod]                     # File Python compilati
+*$py.class                    # File di classe Python
+*.so                          # Librerie condivise
+
+# Cache / temporanei
+.cache/
+*.log                         # File di log
+*.tmp                         # File temporanei
+.DS_Store                     # File macOS
+
+# ----------------------------------------------------------------------------
+# VIRTUAL ENVIRONMENT PYTHON
+# ----------------------------------------------------------------------------
+venv/
+env/
+ENV/
+.venv/
+.env.local
+
+# ----------------------------------------------------------------------------
+# IDE E EDITOR
+# ----------------------------------------------------------------------------
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ----------------------------------------------------------------------------
+# SISTEMA OPERATIVO
+# ----------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.directory
+
+# ----------------------------------------------------------------------------
+# TESTING E SVILUPPO
+# ----------------------------------------------------------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# ----------------------------------------------------------------------------
+# DATABASE (se aggiunti in futuro)
+# ----------------------------------------------------------------------------
+*.db
+*.sqlite
+*.sqlite3
+
+# ----------------------------------------------------------------------------
+# BUILD E DISTRIBUZIONE
+# ----------------------------------------------------------------------------
+build/
+dist/
+*.egg-info/
