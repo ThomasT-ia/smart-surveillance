@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+    .day-selector-box { background: var(--card); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #374151; }
+    .log-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .log-card { background: var(--card); border-radius: 12px; border: 1px solid #374151; overflow: hidden; }
+    .video-box { width: 100%; aspect-ratio: 16/9; background: #000; }
+    video, img { width: 100%; height: 100%; object-fit: cover; }
+    .info { padding: 10px; display: flex; justify-content: space-between; font-size: 0.8rem; }
+    .day-section { display: none; } /* Nascondi tutto all'inizio */
+</style>
+
+<h2 style="color:var(--accent)">Archivio Registrazioni</h2>
+
+<div class="day-selector-box">
+    <label style="color:#94a3b8">Seleziona Data:</label>
+    <select id="logDayPicker" onchange="filterLogs(this.value)" style="background:#111827; color:white; border:1px solid var(--accent); padding:8px; border-radius:5px;">
+        {% for date in grouped_logs.keys() %}
+            <option value="{{ date }}">{{ date }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+{% for date, files in grouped_logs.items() %}
+<div id="section-{{ date }}" class="day-section">
+    <div class="log-grid">
+        {% for file in files %}
+        <div class="log-card">
+            <div class="video-box">
+                {% if '.webm' in file %}
+                    <video controls preload="metadata"><source src="{{ url_for('static', filename='recordings/' + file) }}" type="video/webm"></video>
+                {% else %}
+                    <img src="{{ url_for('static', filename='recordings/' + file) }}">
+                {% endif %}
+            </div>
+            <div class="info">
+                <span>{{ file.split('_')[2][:8].replace('-',':') }}</span>
+                <a href="{{ url_for('static', filename='recordings/' + file) }}" download style="color:var(--accent)">Scarica</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    function filterLogs(date) {
+        // Nascondi tutte le sezioni
+        document.querySelectorAll('.day-section').forEach(el => el.style.display = 'none');
+        // Mostra solo quella selezionata
+        const active = document.getElementById('section-' + date);
+        if(active) active.style.display = 'block';
+    }
+    // Inizializza con la prima data
+    const firstDate = document.getElementById('logDayPicker').value;
+    if(firstDate) filterLogs(firstDate);
+</script>
+{% endblock %}
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --accent: #00f2ff; --bg: #050a0f; --card: #111827; }
+        body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; padding-bottom: 70px; overflow-x: hidden; }
+        
+        /* Navbar Responsive */
+        .navbar { background: #000; position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 12px 0; border-top: 2px solid var(--accent); z-index: 1000; }
+        .nav-item { color: #94a3b8; text-decoration: none; text-align: center; font-size: 0.75rem; transition: 0.3s; }
+        .nav-item i { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+        .nav-item.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+        
+        .container { padding: 15px; max-width: 1200px; margin: auto; }
+
+        @media (min-width: 768px) {
+            body { padding-left: 90px; padding-bottom: 0; }
+            .navbar { top: 0; left: 0; width: 80px; height: 100vh; flex-direction: column; border-top: none; border-right: 2px solid var(--accent); justify-content: center; gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}"><i class="fas fa-home"></i>Home</a>
+        <a href="/stats" class="nav-item {% if request.path == '/stats' %}active{% endif %}"><i class="fas fa-chart-line"></i>Stats</a>
+        <a href="/logs" class="nav-item {% if request.path == '/logs' %}active{% endif %}"><i class="fas fa-folder-open"></i>Logs</a>
+        <a href="{{ url_for('logout') }}" class="nav-item" style="color:#ff4444"><i class="fas fa-power-off"></i> Esci</a>
+    </div>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

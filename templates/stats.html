@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 style="color:var(--accent)"><i class="fas fa-chart-bar"></i> Analisi Attività</h2>
+
+<div style="background:var(--card); padding:15px; border-radius:10px; margin-bottom: 20px; border: 1px solid #374151;">
+    <label style="color:#94a3b8; margin-right: 10px;">Seleziona Giorno:</label>
+    <select id="dayPicker" onchange="updateChart(this.value)" style="background:#111827; color:white; border:1px solid var(--accent); padding:8px; border-radius:5px; cursor:pointer;">
+        {% for date in all_stats.keys() %}
+            <option value="{{ date }}">{{ date }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div style="background:var(--card); padding:20px; border-radius:15px; border: 1px solid #374151; min-height: 400px;">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const dataByDay = {{ all_stats | tojson }};
+    const ctx = document.getElementById('myChart').getContext('2d');
+    let chart;
+
+    function updateChart(date) {
+        if (chart) chart.destroy();
+        
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Array.from({length: 24}, (_, i) => i + ':00'),
+                datasets: [{
+                    label: 'Rilevamenti Personale - ' + date,
+                    data: dataByDay[date],
+                    backgroundColor: 'rgba(0, 242, 255, 0.4)',
+                    borderColor: '#00f2ff',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: '#94a3b8' }, grid: { color: '#374151' } },
+                    x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+                },
+                plugins: { legend: { labels: { color: '#fff' } } }
+            }
+        });
+    }
+
+    const startDay = document.getElementById('dayPicker').value;
+    if(startDay) updateChart(startDay);
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1 style="color:var(--accent)">Live Cam Feed</h1>
+<div style="background:#000; border-radius:15px; overflow:hidden; border: 2px solid var(--accent); margin-bottom:20px;">
+    <img src="{{ url_for('video_feed') }}" style="width:100%">
+</div>
+
+<div style="margin-bottom:20px;">
+    <button id="toggleBtn" onclick="toggleSystem()" 
+            style="width:100%; padding:15px; border-radius:10px; border:none; color:white; font-weight:bold; cursor:pointer; 
+            background: {{ '#ef4444' if enabled else '#10b981' }};">
+        {{ 'SISTEMA ATTIVO (DISATTIVA)' if enabled else 'SISTEMA DISATTIVATO (ATTIVA)' }}
+    </button>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; text-align:center;">
+    <div style="background:var(--card); padding:10px; border-radius:10px; border:1px solid #374151;">
+        <small>CPU</small><br><strong id="cpu" style="color:var(--accent)">--</strong>
+    </div>
+    <div style="background:var(--card); padding:10px; border-radius:10px; border:1px solid #374151;">
+        <small>RAM</small><br><strong id="ram" style="color:var(--accent)">--</strong>
+    </div>
+    <div style="background:var(--card); padding:10px; border-radius:10px; border:1px solid #374151;">
+        <small>DISK</small><br><strong id="disk" style="color:var(--accent)">--</strong>
+    </div>
+</div>
+
+<script>
+    function toggleSystem() {
+        fetch('/toggle_system', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            const btn = document.getElementById('toggleBtn');
+            if(data.status) {
+                btn.style.background = '#ef4444';
+                btn.innerText = 'SISTEMA ATTIVO (DISATTIVA)';
+            } else {
+                btn.style.background = '#10b981';
+                btn.innerText = 'SISTEMA DISATTIVATO (ATTIVA)';
+            }
+        });
+    }
+
+    setInterval(() => {
+        fetch('/api/system_stats').then(r => r.json()).then(data => {
+            document.getElementById('cpu').innerText = data.sys.cpu_temp + '°';
+            document.getElementById('ram').innerText = data.sys.ram + '%';
+            document.getElementById('disk').innerText = data.sys.disk + '%';
+        });
+    }, 3000);
+</script>
+{% endblock %}
